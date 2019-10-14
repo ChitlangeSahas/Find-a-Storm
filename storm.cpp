@@ -69,6 +69,42 @@ class LinkedList
 
 	// ~LinkedList();};
 };
+/*
+* Hash Table Implementation
+*/
+class HashNode {
+public:
+    HashNode(int &key, LinkedList &value) :
+    key(key), value(value), next(NULL) {
+    }
+
+    int getKey() const {
+        return key;
+    }
+
+    LinkedList getValue() const {
+        return value;
+    }
+
+    void setValue(LinkedList value) {
+        HashNode::value = value;
+    }
+
+    HashNode *getNext() const {
+        return next;
+    }
+
+    void setNext(HashNode *next) {
+        HashNode::next = next;
+    }
+
+private:
+    int key;
+    LinkedList value;
+    HashNode *next;
+};
+
+
 
 /*
 * convert the string into vector tokens
