@@ -153,10 +153,33 @@ int 	main(int argc, char const *argv[])
 	// range
 	else if(query[0] == "range")
 	{
-	  	/* code */
+		// range all
+	  	if (query[1] == "all")
+	  	{
+	  		/* code */
+	  	}
+	  	// range <yyyy> 
+	  	else if (is_number(query[1]))
+	  	{
+	  		/* code */
+	  	}
+	  	else cout << "INVALID QUERY";
 	}
+	// storm 1 1950
 
+	else if(is_number(query[0]))
+	{
+		int n_years = stoi(query[0]);
+		std::vector<int> years;
+		// make a vector of years one wants to get data of.
+		for (int i = 1; i <= n_years; ++i)
+			{
+				years.push_back(stoi(query[i]));
+			}	
+		
+	}
 	else cout << "INVALID QUERY";
+
 
 	return 0;
 }
