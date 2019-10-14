@@ -88,6 +88,7 @@ std::vector<string> 	str_to_vector_tokens(std::string str, std::string delim)
     while (pos < str.length() && prev < str.length());
     return tokens;
 }
+
 /*
 * Get the command line query as a string 
 */
@@ -149,6 +150,7 @@ int 	main(int argc, char const *argv[])
 
 		else cout << "INVALID QUERY";
 	}
+	// range
 	else if(query[0] == "range")
 	{
 	  	/* code */
