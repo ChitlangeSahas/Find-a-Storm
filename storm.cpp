@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "defn.h"
 
 using namespace std;
 
@@ -10,14 +11,13 @@ using namespace std;
 */
 class LinkedList
 {
-
-	private:
+private:
 	struct node
 	{
-		string data;
+		hash_table_entry data;
 		node *next;
 	};
-	public:
+public:
 	node *head , *tail;
 	int size;
 	LinkedList()
@@ -32,7 +32,7 @@ class LinkedList
 		return head;
 	}
 
-  void push(string d)
+  void push(hash_table_entry d)
     {
       node *temp=new node;
       temp->data=d;
@@ -58,7 +58,7 @@ class LinkedList
 		node *ptr = head;
 		while(ptr != nullptr)
 		{
-			cout << ptr->data << "->";
+			cout << ptr->data.event_id << "->";
 			ptr = ptr->next;
 		}
 		if (size == 0)
@@ -70,10 +70,23 @@ class LinkedList
 	// ~LinkedList();};
 };
 
+struct hashNode
+{
+	LinkedList list;
+	hashNode *next;
+};
+
 class HashTable
 {
+private:
+	hashNode *hash_table_head;
 public:
-	HashTable();
+	HashTable(int TABLE_SIZE)
+	{
+		// make the head point to the head? Lol.
+		hash_table_head = (hashNode*) malloc( TABLE_SIZE * (sizeof(hashNode)));
+	};
+
 	~HashTable();
 };
 

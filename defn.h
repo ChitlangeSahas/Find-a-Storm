@@ -4,7 +4,7 @@
 #define	COUNTY_LEN	30
 #define	TOR_LEN		4
 #define DATE_LEN    20
-#define FAC_LOC     25
+#define FAT_LOC     25
 
 struct annual_storms{
 	int year; // Year of storm events
