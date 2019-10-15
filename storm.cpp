@@ -14,7 +14,7 @@ class LinkedList
 private:
 	struct node
 	{
-		hash_table_entry data;
+		hash_table_entry entry;
 		node *next;
 	};
 public:
@@ -32,10 +32,10 @@ public:
 		return head;
 	}
 
-  void push(hash_table_entry d)
+  void push(hash_table_entry e)
     {
       node *temp=new node;
-      temp->data=d;
+      temp->entry=e;
       temp->next=NULL;
 
       if(head==NULL)
@@ -58,7 +58,7 @@ public:
 		node *ptr = head;
 		while(ptr != nullptr)
 		{
-			cout << ptr->data.event_id << "->";
+			cout << ptr->entry.event_id << "->";
 			ptr = ptr->next;
 		}
 		if (size == 0)
@@ -86,6 +86,19 @@ public:
 		// make the head point to the head? Lol.
 		hash_table_head = (hashNode*) malloc( TABLE_SIZE * (sizeof(hashNode)));
 	};
+
+	void add_at_key(hash_table_entry entry, int key)
+	{
+		hashNode *ptr = hash_table_head;
+
+		hashNode *temp = new hashNode;
+		temp->list.push(entry);
+		for (int i = 0; i <= key; ++i)
+		{
+			ptr = ptr->next;
+		}
+	}
+
 
 	~HashTable();
 };
