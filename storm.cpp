@@ -70,6 +70,13 @@ class LinkedList
 	// ~LinkedList();};
 };
 
+class HashTable
+{
+public:
+	HashTable();
+	~HashTable();
+};
+
 /*
 * convert the string into vector tokens
 */
