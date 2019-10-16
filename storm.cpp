@@ -56,15 +56,20 @@ public:
 	void print_list()
 	{
 		node *ptr = head;
-		while(ptr != NULL)
-		{
-			cout << ptr->entry.year << "->";
-			ptr = ptr->next;
-		}
 		if (size == 0)
 		{
-			cout << "list is empty\n";
+			cout << "NULL\n";
 		}
+		else
+		{
+			while(ptr != NULL)
+			{
+				cout << ptr->entry.year << "->";
+				ptr = ptr->next;
+			}
+			cout << "\n";
+		}
+		
 	}
 };
 
@@ -90,15 +95,21 @@ struct hashNode
 	}
 };
 
+/*
+* Hashtable implementation
+*/
 class HashTable
 {
 private:
 	int T_SIZE = 0;
-	
+
 	hashNode *hash_table_head;
 	hashNode *ptr;
 
 public:
+	/*
+	* constructor
+	*/
 	HashTable(int TABLE_SIZE)
 	{
 		T_SIZE = TABLE_SIZE;
@@ -107,14 +118,27 @@ public:
 		hashNode *ptr = hash_table_head;
 		
 		// blow it up.
-		hashNode node;
+		hashNode empty_node;
 		for (int i = 0; i < TABLE_SIZE; ++i)
 		{
-			*ptr = node;
-			ptr++;
+			*ptr = empty_node;
+			 ptr++;
 		}
 	};
 
+	int hash_it(hash_table_entry e)
+	{
+		return (e.event_id % T_SIZE);  
+	}
+
+	/*
+	* Add the entry to the table
+	*/
+	void add_to_table(hash_table_entry e)
+	{
+		int key = hash_it(e);
+		add_at_key(e, key);
+	}
 
 	/*
 	* Add a value at the respective key.
@@ -129,6 +153,9 @@ public:
 		ptr->add_to_node(entry);
 	}
 
+	/*
+	* print the damn thing
+	*/
 	void print_hash_table()
 	{
 		hashNode *ptr = hash_table_head;
@@ -256,12 +283,21 @@ int 	main(int argc, char const *argv[])
 
 
 	hash_table_entry entry;
-		entry.event_id = '1';
+		entry.event_id = 'a';
 		entry.year = 2019;
 		entry.event_index = 1;
 
+	hash_table_entry entry2;
+		entry2.event_id = 'b';
+		entry2.year = 2019;
+		entry2.event_index = 1;
+
 	// cout << sizeof();
-	table.add_at_key(entry, 1);
+	table.add_to_table(entry);
+	table.add_to_table(entry);
+	table.add_to_table(entry);
+	table.add_to_table(entry2);
+
 	table.print_hash_table();
 
 	return 0;
