@@ -18,8 +18,8 @@ private:
 		node *next;
 	};
 public:
-	node *head , *tail;
 	int size;
+	node *head , *tail;
 	LinkedList()
 	{
 		size = 0;
@@ -27,12 +27,12 @@ public:
 		tail = NULL;
 	};
 
-	node* get_head()
+	int get_size()
 	{
-		return head;
+		return size;
 	}
 
-  void push(hash_table_entry e)
+  void add(hash_table_entry e)
     {
       node *temp=new node;
       temp->entry=e;
@@ -56,9 +56,9 @@ public:
 	void print_list()
 	{
 		node *ptr = head;
-		while(ptr != nullptr)
+		while(ptr != NULL)
 		{
-			cout << ptr->entry.event_id << "->";
+			cout << ptr->entry.year << "->";
 			ptr = ptr->next;
 		}
 		if (size == 0)
@@ -66,41 +66,80 @@ public:
 			cout << "list is empty\n";
 		}
 	}
-
-	// ~LinkedList();};
 };
 
 struct hashNode
 {
 	LinkedList list;
 	hashNode *next;
+
+	void print_node()
+	{
+
+		list.print_list();
+	}
+
+	int size()
+	{
+		return list.get_size();
+	}
+
+	void add_to_node(hash_table_entry e)
+	{
+		list.add(e);
+	}
 };
 
 class HashTable
 {
 private:
+	int T_SIZE = 0;
+	
 	hashNode *hash_table_head;
+	hashNode *ptr;
+
 public:
 	HashTable(int TABLE_SIZE)
 	{
-		// make the head point to the head? Lol.
-		hash_table_head = (hashNode*) malloc( TABLE_SIZE * (sizeof(hashNode)));
+		T_SIZE = TABLE_SIZE;
+
+		hash_table_head = (hashNode*) malloc(TABLE_SIZE * sizeof(hashNode));
+		hashNode *ptr = hash_table_head;
+		
+		// blow it up.
+		hashNode node;
+		for (int i = 0; i < TABLE_SIZE; ++i)
+		{
+			*ptr = node;
+			ptr++;
+		}
 	};
 
+
+	/*
+	* Add a value at the respective key.
+	*/
 	void add_at_key(hash_table_entry entry, int key)
 	{
 		hashNode *ptr = hash_table_head;
-
-		hashNode *temp = new hashNode;
-		temp->list.push(entry);
-		for (int i = 0; i <= key; ++i)
+		for (int i = 0; i < key; ++i)
 		{
-			ptr = ptr->next;
+			ptr++;
+		}
+		ptr->add_to_node(entry);
+	}
+
+	void print_hash_table()
+	{
+		hashNode *ptr = hash_table_head;
+		for (int i = 0; i < T_SIZE; ++i)
+		{
+			ptr->print_node();
+			ptr++;
 		}
 	}
 
-
-	~HashTable();
+	// ~HashTable();
 };
 
 /*
@@ -146,7 +185,7 @@ std::vector<string>	parse_query(char const *argv[])
 * helper function to check if 
 * a string is a number
 */
-bool is_number(const std::string& s)
+bool is_number(string& s)
 {
     std::string::const_iterator it = s.begin();
     while (it != s.end() && std::isdigit(*it)) ++it;
@@ -155,63 +194,75 @@ bool is_number(const std::string& s)
 
 int 	main(int argc, char const *argv[])
 {
-	std::vector<string> query = parse_query(argv);
+	// std::vector<string> query = parse_query(argv);
 
-	// find
-	if (query[0] == "find")
-	{
-		// find event
-		if (query[1] == "event")
-		{
-			/* code */
-		}
-		// find max
-		else if (query[1] == "max")
-		{
-			// find max fatality
-			if (query[2] == "fatality")
-			{
-				/* code */
-			}
-			// find max 
-			else if (is_number(query[2]))
-			{
-				/* code */
-			}
-			else cout << "INVALID QUERY";
-		}
-		else cout << "INVALID QUERY";
-	}
-	// range
-	else if(query[0] == "range")
-	{
-		// range all
-	  	if (query[1] == "all")
-	  	{
-	  		/* code */
-	  	}
-	  	// range <yyyy> 
-	  	else if (is_number(query[1]))
-	  	{
-	  		/* code */
-	  	}
-	  	else cout << "INVALID QUERY";
-	}
-	// storm 1 1950
+	// // find
+	// if (query[0] == "find")
+	// {
+	// 	// find event
+	// 	if (query[1] == "event")
+	// 	{
+	// 		/* code */
+	// 	}
+	// 	// find max
+	// 	else if (query[1] == "max")
+	// 	{
+	// 		// find max fatality
+	// 		if (query[2] == "fatality")
+	// 		{
+	// 			/* code */
+	// 		}
+	// 		// find max 
+	// 		else if (is_number(query[2]))
+	// 		{
+	// 			/* code */
+	// 		}
+	// 		else cout << "INVALID QUERY";
+	// 	}
+	// 	else cout << "INVALID QUERY";
+	// }
+	// // range
+	// else if(query[0] == "range")
+	// {
+	// 	// range all
+	//   	if (query[1] == "all")
+	//   	{
+	//   		/* code */
+	//   	}
+	//   	// range <yyyy> 
+	//   	else if (is_number(query[1]))
+	//   	{
+	//   		/* code */
+	//   	}
+	//   	else cout << "INVALID QUERY";
+	// }
+	// // storm 1 1950
 
-	else if(is_number(query[0]))
-	{
-		int n_years = stoi(query[0]);
-		std::vector<int> years;
-		// make a vector of years one wants to get data of.
-		for (int i = 1; i <= n_years; ++i)
-			{
-				years.push_back(stoi(query[i]));
-			}	
+	// else if(is_number(query[0]))
+	// {
+	// 	int n_years = stoi(query[0]);
+	// 	std::vector<int> years;
+	// 	// make a vector of years one wants to get data of.
+	// 	for (int i = 1; i <= n_years; ++i)
+	// 		{
+	// 			years.push_back(stoi(query[i]));
+	// 		}	
 		
-	}
-	else cout << "INVALID QUERY";
+	// }
+	// else cout << "INVALID QUERY";
 
+
+	HashTable table(5);
+
+
+	hash_table_entry entry;
+		entry.event_id = '1';
+		entry.year = 2019;
+		entry.event_index = 1;
+
+	// cout << sizeof();
+	table.add_at_key(entry, 1);
+	table.print_hash_table();
 
 	return 0;
 }
