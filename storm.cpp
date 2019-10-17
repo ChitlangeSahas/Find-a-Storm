@@ -68,7 +68,7 @@ public:
 		{
 			while(ptr != NULL)
 			{
-				cout << ptr->entry.year << "->";
+				cout << ptr->entry.event_id << "->";
 				ptr = ptr->next;
 			}
 			cout << "\n";
@@ -197,7 +197,6 @@ std::vector<string> 	str_to_vector_tokens(std::string str, std::string delim)
 */
 std::vector<string>	parse_query(char const *argv[])
 {
-
 	int i = 1;
 	string query = "";
 	while(argv[i])
@@ -223,29 +222,57 @@ bool is_number(string& s)
     return !s.empty() && it == s.end();
 }
 
-int 	main(int argc, char const *argv[])
+/*
+* convert the file into a vector. 
+*/
+std::vector<string> 	file_to_vector()
 {
+	int line_n = 0;
 	string FILE_PATH = string(ROOT_FOLDER) + "details-1950.csv";
+	string line;
+	ifstream file_stream;
 
 	// open file and put the file into a 2d vector.
 	char fp[FILE_PATH.size() + 1];
 	strcpy(fp, FILE_PATH.c_str());
 
-	ifstream file_stream;
-
 	file_stream.open(fp);
-	string line;
-	int line_n = 0;
-
-	getline(file_stream, line);
+	// get rid of the first line
+	getline(file_stream, line); 
 
 	std::vector<string> lines;
 
+	// make a vector 
 	while(getline(file_stream, line).good())
 	{
 		lines.push_back(line);
 	}
+	return lines;
+}
 
+
+int 	main(int argc, char const *argv[])
+{
+	std::vector<string> lines = file_to_vector();
+
+	HashTable table(lines.size());
+
+	storm_event
+
+	int index = 0;
+
+	for (int i = 0; i < lines.size(); ++i)
+	{
+		std::vector<string> line = str_to_vector_tokens(lines[i], ",");
+		hash_table_entry e;
+			e.event_id = stoi(line[0]);
+			e.event_index = index;
+			e.year = stoi(line[2]);
+		index++;
+		table.add_to_table(e);
+	}
+
+	table.print_hash_table();
 
 	// std::vector<string> query = parse_query(argv);
 
