@@ -250,29 +250,53 @@ std::vector<string> 	file_to_vector()
 	return lines;
 }
 
+int 	convert_to_digits(string str)
+{
+	int multiplier 
+}
 
 int 	main(int argc, char const *argv[])
 {
 	std::vector<string> lines = file_to_vector();
 
-	HashTable table(lines.size());
-
-	storm_event
-
 	int index = 0;
+	int TABLE_SIZE = lines.size();
 
-	for (int i = 0; i < lines.size(); ++i)
+	HashTable table(TABLE_SIZE);
+	storm_event *event = (storm_event*) malloc(TABLE_SIZE * sizeof(storm_event));
+
+
+	for (int i = 0; i < TABLE_SIZE; ++i)
 	{
 		std::vector<string> line = str_to_vector_tokens(lines[i], ",");
 		hash_table_entry e;
 			e.event_id = stoi(line[0]);
 			e.event_index = index;
 			e.year = stoi(line[2]);
+
+
+		storm_event se;
+			se.event_id = stoi(line[0]);
+			strcpy(se.state, line[1].c_str());
+			se.year = stoi(line[2]);
+			strcpy(se.month_name, line[3].c_str());
+			strcpy(se.event_type, line[4].c_str());
+			se.cz_type =  line[5][0];
+			strcpy(se.cz_name, line[6].c_str());
+			se.injuries_direct = stoi(line[7]);
+			se.injuries_indirect = stoi(line[8]);
+			se.deaths_direct = stoi(line[9]);
+			se.deaths_indirect = stoi(line[10]);
+			se.damage_property = convert_to_digits(line[11]);
+			se.damage_crops = stoi(line[12]);
+			strcpy(se.tor_f_scale, line[13].c_str());
+
 		index++;
 		table.add_to_table(e);
 	}
 
 	table.print_hash_table();
+
 
 	// std::vector<string> query = parse_query(argv);
 
