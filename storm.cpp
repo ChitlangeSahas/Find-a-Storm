@@ -278,27 +278,5 @@ int 	main(int argc, char const *argv[])
 	// }
 	// else cout << "INVALID QUERY";
 
-
-	HashTable table(5);
-
-
-	hash_table_entry entry;
-		entry.event_id = 'a';
-		entry.year = 2019;
-		entry.event_index = 1;
-
-	hash_table_entry entry2;
-		entry2.event_id = 'b';
-		entry2.year = 2019;
-		entry2.event_index = 1;
-
-	// cout << sizeof();
-	table.add_to_table(entry);
-	table.add_to_table(entry);
-	table.add_to_table(entry);
-	table.add_to_table(entry2);
-
-	table.print_hash_table();
-
 	return 0;
 }
