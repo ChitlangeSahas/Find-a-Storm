@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <iostream>
-#include <string>
+#include <fstream>
+#include <string.h>
 #include <vector>
 #include "defn.h"
 
+#define ROOT_FOLDER "./1950-1952/"
+
 using namespace std;
+
 
 /*
 * LinkedList Class implementation
@@ -221,6 +225,28 @@ bool is_number(string& s)
 
 int 	main(int argc, char const *argv[])
 {
+	string FILE_PATH = string(ROOT_FOLDER) + "details-1950.csv";
+
+	// open file and put the file into a 2d vector.
+	char fp[FILE_PATH.size() + 1];
+	strcpy(fp, FILE_PATH.c_str());
+
+	ifstream file_stream;
+
+	file_stream.open(fp);
+	string line;
+	int line_n = 0;
+
+	getline(file_stream, line);
+
+	std::vector<string> lines;
+
+	while(getline(file_stream, line).good())
+	{
+		lines.push_back(line);
+	}
+
+
 	// std::vector<string> query = parse_query(argv);
 
 	// // find
@@ -277,6 +303,7 @@ int 	main(int argc, char const *argv[])
 		
 	// }
 	// else cout << "INVALID QUERY";
+
 
 	return 0;
 }
