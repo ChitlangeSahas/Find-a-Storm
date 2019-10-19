@@ -57,6 +57,31 @@ public:
     size++;
     }
 
+    hash_table_entry at(int index)
+    {
+    	node *n = head;
+    	for (int i = 0; i < index; ++i)
+    	{
+    		n = n->next;
+    	}
+    	return n->entry;
+    }
+
+	hash_table_entry find(int event_id)
+	{
+		hash_table_entry e;
+			e.event_id = -1;
+
+		for (int i = 0; i < size; ++i)
+		{
+			if (at(i).event_id == event_id)
+			{
+				e = at(i);
+			}
+		}
+		return e;
+	}
+
 	void print_list()
 	{
 		node *ptr = head;
@@ -80,7 +105,6 @@ public:
 struct hashNode
 {
 	LinkedList list;
-	hashNode *next;
 
 	void print_node()
 	{
@@ -97,6 +121,16 @@ struct hashNode
 	{
 		list.add(e);
 	}
+
+	hash_table_entry at(int index)
+	{
+		return list.at(index);
+	} 
+
+	hash_table_entry find(int event_id)
+	{
+		return list.find(event_id);
+	}  
 };
 
 /*
@@ -135,6 +169,21 @@ public:
 		return (e.event_id % T_SIZE);  
 	}
 
+	int hash_it(int event_id)
+	{
+		return (event_id % T_SIZE);  
+	}
+
+	hashNode at(int index)
+	{
+		hashNode *ptr = hash_table_head;
+		for (int i = 0; i < index; ++i)
+		{
+			ptr++;
+		}
+		return *ptr;
+	}
+
 	/*
 	* Add the entry to the table
 	*/
@@ -168,6 +217,14 @@ public:
 			ptr->print_node();
 			ptr++;
 		}
+	}
+
+	hash_table_entry find(int event_id)
+	{
+		int key = hash_it(event_id);
+
+		hashNode n = at(key);
+		return n.find(event_id);
 	}
 
 	// ~HashTable();
@@ -252,7 +309,50 @@ std::vector<string> 	file_to_vector()
 
 int 	convert_to_digits(string str)
 {
-	int multiplier 
+	char suffix = str[str.length() - 1];
+	int multiplier = 1;
+
+	// 200K
+	if (suffix == 'K')
+	{
+		multiplier = 1000;
+	}
+	// 10.0M
+	else if(suffix == 'M')
+	{
+		multiplier = 1000000;
+	}
+	
+	string number = "";
+	for (int i = 0; i < str.length() - 1; ++i)
+	{
+		number += str[i];
+	}
+
+	int value = stof(number) * multiplier;
+	
+	return value; 
+}
+
+/*
+* Print the storm event
+*/
+void 	print_storm_event(storm_event se)
+{
+	cout << "EVENT ID : " << se.event_id << "\n";
+	cout << "STATE : " << se.state << "\n";	
+	cout << "YEAR : " << se.year << "\n";	
+	cout << "MONTH : " << se.month_name << "\n";
+	cout << "EVENT TYPE : " << se.event_type << "\n";
+	cout << "CZ TYPE : " << se.cz_type << "\n";
+	cout << "CZ NAME : " << se.cz_name << "\n";
+	cout << "INJURIES DIRECT : " << se.injuries_direct << "\n";
+	cout << "INJURIES INDIRECT : " << se.injuries_indirect << "\n";
+	cout << "DEATHS DIRECT: " << se.deaths_direct << "\n";
+	cout << "DEATHS INDIRECT : " << se.deaths_indirect << "\n";
+	cout << "DAMAGE PROPERTY : " << se.damage_property << "\n";
+	cout << "DAMAGE CROPS : " << se.damage_crops << "\n";
+	cout << "TOR F Scale : " << se.tor_f_scale << "\n";	 
 }
 
 int 	main(int argc, char const *argv[])
@@ -291,69 +391,81 @@ int 	main(int argc, char const *argv[])
 			se.damage_crops = stoi(line[12]);
 			strcpy(se.tor_f_scale, line[13].c_str());
 
+			// add the storm event to the damn storm event array
+			storm_event *ptr = event;
+			for (int i = 0; i < index; ++i)
+			{
+				ptr++;
+			}
+			*ptr = se; 
+
 		index++;
 		table.add_to_table(e);
 	}
 
-	table.print_hash_table();
 
+	std::vector<string> query = parse_query(argv);
 
-	// std::vector<string> query = parse_query(argv);
+	// find
+	if (query[0] == "find")
+	{
+		// find event
+		if (query[1] == "event")
+		{
+			int i = table.find(stoi(query[2])).event_index;
+			storm_event *ptr = event;
+			for (int i = 0; i < i; ++i)
+			{
+				ptr++;
+			}
+			print_storm_event(*ptr);
+		}
+		// find max
+		else if (query[1] == "max")
+		{
+			// find max fatality
+			if (query[2] == "fatality")
+			{
+				/* code */
+			}
+			// find max 
+			else if (is_number(query[2]))
+			{
+				/* code */
+			}
+			else cout << "INVALID QUERY";
+		}
+		else cout << "INVALID QUERY";
+	}
+	// range
+	else if(query[0] == "range")
+	{
+		// range all
+	  	if (query[1] == "all")
+	  	{
+	  		/* code */
+	  	}
+	  	// range <yyyy> 
+	  	else if (is_number(query[1]))
+	  	{
+	  		/* code */
+	  	}
+	  	else cout << "INVALID QUERY";
+	}
+	// storm 1 1950
 
-	// // find
-	// if (query[0] == "find")
-	// {
-	// 	// find event
-	// 	if (query[1] == "event")
-	// 	{
-	// 		/* code */
-	// 	}
-	// 	// find max
-	// 	else if (query[1] == "max")
-	// 	{
-	// 		// find max fatality
-	// 		if (query[2] == "fatality")
-	// 		{
-	// 			/* code */
-	// 		}
-	// 		// find max 
-	// 		else if (is_number(query[2]))
-	// 		{
-	// 			/* code */
-	// 		}
-	// 		else cout << "INVALID QUERY";
-	// 	}
-	// 	else cout << "INVALID QUERY";
-	// }
-	// // range
-	// else if(query[0] == "range")
-	// {
-	// 	// range all
-	//   	if (query[1] == "all")
-	//   	{
-	//   		/* code */
-	//   	}
-	//   	// range <yyyy> 
-	//   	else if (is_number(query[1]))
-	//   	{
-	//   		/* code */
-	//   	}
-	//   	else cout << "INVALID QUERY";
-	// }
-	// // storm 1 1950
-
-	// else if(is_number(query[0]))
-	// {
-	// 	int n_years = stoi(query[0]);
-	// 	std::vector<int> years;
-	// 	// make a vector of years one wants to get data of.
-	// 	for (int i = 1; i <= n_years; ++i)
-	// 		{
-	// 			years.push_back(stoi(query[i]));
-	// 		}	
+	else if(is_number(query[0]))
+	{
+		int n_years = stoi(query[0]);
+		std::vector<int> years;
+		// make a vector of years one wants to get data of.
+		for (int i = 1; i <= n_years; ++i)
+			{
+				years.push_back(stoi(query[i]));
+			}	
 		
-	// }
-	// else cout << "INVALID QUERY";
+	}
+	else cout << "INVALID QUERY";
 
 
 	return 0;
