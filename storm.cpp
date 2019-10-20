@@ -2,7 +2,6 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
-#include <vector>
 #include "defn.h"
 
 #define ROOT_FOLDER "./1950-1952/"
@@ -233,7 +232,7 @@ public:
 /*
 * convert the string into vector tokens
 */
-std::vector<string> 	str_to_vector_tokens(std::string str, std::string delim)
+string* 	str_to_vector_tokens(std::string str, std::string delim)
 {
     std::vector<std::string> tokens;
     size_t prev = 0, pos = 0;
