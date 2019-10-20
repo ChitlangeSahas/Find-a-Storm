@@ -461,10 +461,10 @@ void 	print_storm_event(storm_event se)
 
 int 	main(int argc, char const *argv[])
 {
-	ArrayList<string> lines = file_to_vector();
+	ArrayList<string> details_lines = file_to_vector();
 
 	int index = 0;
-	int TABLE_SIZE = lines.size();
+	int TABLE_SIZE = details_lines.size();
 
 	HashTable table(TABLE_SIZE);
 	storm_event *event = (storm_event*) malloc(TABLE_SIZE * sizeof(storm_event));
@@ -472,28 +472,28 @@ int 	main(int argc, char const *argv[])
 
 	for (int i = 0; i < TABLE_SIZE; ++i)
 	{
-		ArrayList<string> line = str_to_vector_tokens(lines[i], ",");
+		ArrayList<string> detail_line = str_to_vector_tokens(details_lines[i], ",");
 		hash_table_entry e;
-			e.event_id = stoi(line[0]);
+			e.event_id = stoi(detail_line[0]);
 			e.event_index = index;
-			e.year = stoi(line[2]);
+			e.year = stoi(detail_line[2]);
 
 
 		storm_event se;
-			se.event_id = stoi(line[0]);
-			strcpy(se.state, line[1].c_str());
-			se.year = stoi(line[2]);
-			strcpy(se.month_name, line[3].c_str());
-			strcpy(se.event_type, line[4].c_str());
-			se.cz_type =  line[5][0];
-			strcpy(se.cz_name, line[6].c_str());
-			se.injuries_direct = stoi(line[7]);
-			se.injuries_indirect = stoi(line[8]);
-			se.deaths_direct = stoi(line[9]);
-			se.deaths_indirect = stoi(line[10]);
-			se.damage_property = convert_to_digits(line[11]);
-			se.damage_crops = stoi(line[12]);
-			strcpy(se.tor_f_scale, line[13].c_str());
+			se.event_id = stoi(detail_line[0]);
+			strcpy(se.state, detail_line[1].c_str());
+			se.year = stoi(detail_line[2]);
+			strcpy(se.month_name, detail_line[3].c_str());
+			strcpy(se.event_type, detail_line[4].c_str());
+			se.cz_type =  detail_line[5][0];
+			strcpy(se.cz_name, detail_line[6].c_str());
+			se.injuries_direct = stoi(detail_line[7]);
+			se.injuries_indirect = stoi(detail_line[8]);
+			se.deaths_direct = stoi(detail_line[9]);
+			se.deaths_indirect = stoi(detail_line[10]);
+			se.damage_property = convert_to_digits(detail_line[11]);
+			se.damage_crops = stoi(detail_line[12]);
+			strcpy(se.tor_f_scale, detail_line[13].c_str());
 
 			// add the storm event to the damn storm event array
 			storm_event *ptr = event;
