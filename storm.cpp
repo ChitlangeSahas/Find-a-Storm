@@ -5,6 +5,9 @@
 // #include <vector>
 #include "defn.h"
 
+/*
+* No vectors? I made an Arraylist class.
+*/
 template <class T>
 class  ArrayList {
 public:
@@ -102,12 +105,10 @@ T& ArrayList<T>::operator[](unsigned int index) {
     return buffer[index];
 }
 
-
 template<class T>
 ArrayList<T>::~ArrayList() {
     delete[] buffer;
 }
-
 
 #define ROOT_FOLDER "./1950-1952/"
 
@@ -175,7 +176,6 @@ public:
 	{
 		hash_table_entry e;
 			e.event_id = -1;
-
 		for (int i = 0; i < size; ++i)
 		{
 			if (at(i).event_id == event_id)
@@ -339,7 +339,7 @@ public:
 */
 ArrayList<string>  	str_to_vector_tokens(std::string str, std::string delim)
 {
-    ArrayList<std::string> tokens;
+    ArrayList<string> tokens;
     size_t prev = 0, pos = 0;
     do
     {
@@ -507,7 +507,6 @@ int 	main(int argc, char const *argv[])
 		table.add_to_table(e);
 	}
 
-
 	ArrayList<string> query = parse_query(argv);
 
 	// find
@@ -516,9 +515,10 @@ int 	main(int argc, char const *argv[])
 		// find event
 		if (query[1] == "event")
 		{
-			int i = table.find(stoi(query[2])).event_index;
+
+			int ei = table.find(stoi(query[2])).event_index;
 			storm_event *ptr = event;
-			for (int i = 0; i < i; ++i)
+			for (int i = 0; i < ei; ++i)
 			{
 				ptr++;
 			}
