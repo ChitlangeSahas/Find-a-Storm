@@ -2,7 +2,112 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
+// #include <vector>
 #include "defn.h"
+
+template <class T>
+class  ArrayList {
+public:
+
+    typedef T* Iterator;
+
+    ArrayList();
+    ArrayList(unsigned int size);
+    ArrayList(unsigned int size, const T & initial);
+    ArrayList(const ArrayList<T>& v);
+    ~ArrayList();
+
+    unsigned int capacity() const;
+    unsigned int size() const;
+    bool empty() const;
+    Iterator begin();
+    Iterator end();
+    T& front();
+    T& back();
+    void push_back(const T& value);
+    void pop_back();
+
+    void reserve(unsigned int capacity);
+    void resize(unsigned int size);
+
+    T & operator[](unsigned int index);
+    ArrayList<T> & operator = (const ArrayList<T> &);
+    void clear();
+private:
+    unsigned int _size;
+    unsigned int _capacity;
+    unsigned int Log;
+    T* buffer;
+};
+
+template<class T>
+ArrayList<T>::ArrayList() {
+    _capacity = 0;
+    _size = 0;
+    buffer = 0;
+    Log = 0;
+}
+
+
+template<class T>
+ArrayList<T>& ArrayList<T>::operator = (const ArrayList<T> & v) {
+    delete[] buffer;
+    _size = v._size;
+    Log = v.Log;
+    _capacity = v._capacity;
+    buffer = new T [_capacity];
+    for (unsigned int i = 0; i < _size; i++)
+        buffer[i] = v.buffer[i];
+    return *this;
+}
+
+template<class T>
+void ArrayList<T>::push_back(const T & v) {
+    /*
+        Incidentally, one common way of regrowing an array is to double the size as needed.
+        This is so that if you are inserting n items at most only O(log n) regrowths are performed
+        and at most O(n) space is wasted.
+    */
+    if (_size >= _capacity) {
+        reserve(1 << Log);
+        Log++;
+    }
+    buffer [_size++] = v;
+}
+
+template<class T>
+void ArrayList<T>::pop_back() {
+    _size--;
+}
+
+template<class T>
+void ArrayList<T>::reserve(unsigned int capacity) {
+    T * newBuffer = new T[capacity];
+
+    for (unsigned int i = 0; i < _size; i++)
+        newBuffer[i] = buffer[i];
+
+    _capacity = capacity;
+    delete[] buffer;
+    buffer = newBuffer;
+}
+
+template<class T>
+unsigned int ArrayList<T>::size() const {
+    return _size;
+}
+
+template<class T>
+T& ArrayList<T>::operator[](unsigned int index) {
+    return buffer[index];
+}
+
+
+template<class T>
+ArrayList<T>::~ArrayList() {
+    delete[] buffer;
+}
+
 
 #define ROOT_FOLDER "./1950-1952/"
 
@@ -232,9 +337,9 @@ public:
 /*
 * convert the string into vector tokens
 */
-string* 	str_to_vector_tokens(std::string str, std::string delim)
+ArrayList<string>  	str_to_vector_tokens(std::string str, std::string delim)
 {
-    std::vector<std::string> tokens;
+    ArrayList<std::string> tokens;
     size_t prev = 0, pos = 0;
     do
     {
@@ -251,7 +356,7 @@ string* 	str_to_vector_tokens(std::string str, std::string delim)
 /*
 * Get the command line query as a string 
 */
-std::vector<string>	parse_query(char const *argv[])
+ArrayList<string>	parse_query(char const *argv[])
 {
 	int i = 1;
 	string query = "";
@@ -261,7 +366,7 @@ std::vector<string>	parse_query(char const *argv[])
 		query += ",";
 		i++; 
 	}
-	std::vector<string> query_v;
+	ArrayList<string> query_v;
 
 	query_v = str_to_vector_tokens(query, ",");
 	return query_v;
@@ -281,7 +386,7 @@ bool is_number(string& s)
 /*
 * convert the file into a vector. 
 */
-std::vector<string> 	file_to_vector()
+ArrayList<string> 	file_to_vector()
 {
 	int line_n = 0;
 	string FILE_PATH = string(ROOT_FOLDER) + "details-1950.csv";
@@ -296,7 +401,7 @@ std::vector<string> 	file_to_vector()
 	// get rid of the first line
 	getline(file_stream, line); 
 
-	std::vector<string> lines;
+	ArrayList<string> lines;
 
 	// make a vector 
 	while(getline(file_stream, line).good())
@@ -356,7 +461,7 @@ void 	print_storm_event(storm_event se)
 
 int 	main(int argc, char const *argv[])
 {
-	std::vector<string> lines = file_to_vector();
+	ArrayList<string> lines = file_to_vector();
 
 	int index = 0;
 	int TABLE_SIZE = lines.size();
@@ -367,7 +472,7 @@ int 	main(int argc, char const *argv[])
 
 	for (int i = 0; i < TABLE_SIZE; ++i)
 	{
-		std::vector<string> line = str_to_vector_tokens(lines[i], ",");
+		ArrayList<string> line = str_to_vector_tokens(lines[i], ",");
 		hash_table_entry e;
 			e.event_id = stoi(line[0]);
 			e.event_index = index;
@@ -403,7 +508,7 @@ int 	main(int argc, char const *argv[])
 	}
 
 
-	std::vector<string> query = parse_query(argv);
+	ArrayList<string> query = parse_query(argv);
 
 	// find
 	if (query[0] == "find")
@@ -456,7 +561,7 @@ int 	main(int argc, char const *argv[])
 	else if(is_number(query[0]))
 	{
 		int n_years = stoi(query[0]);
-		std::vector<int> years;
+		ArrayList<int> years;
 		// make a vector of years one wants to get data of.
 		for (int i = 1; i <= n_years; ++i)
 			{
