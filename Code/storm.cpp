@@ -5,7 +5,6 @@
 #include <string.h>
 #include <math.h>
 #include "defn.h"
-#include <climits>
 
 /*
 * No vectors? I made an Arraylist class.
@@ -112,7 +111,7 @@ ArrayList<T>::~ArrayList() {
     delete[] buffer;
 }
 
-#define ROOT_FOLDER "./1950-1952/"
+#define ROOT_FOLDER "./"
 
 
 ArrayList<int> years;
@@ -509,7 +508,7 @@ void 	print_storm_event(storm_event se)
 	cout << "DAMAGE CROPS : " << se.damage_crops << "\n";
 	cout << "TOR F Scale : " << se.tor_f_scale << "\n";	 
 
-	if (se.f->event_id != 0)
+	if (se.deaths_direct != 0 || se.deaths_direct != 0 )
 	{
 		cout << "Fatality Information: " << endl;
 		cout << "FATALITY ID : " << se.f->fatality_id << "\n";
@@ -618,10 +617,9 @@ int 	main(int argc, char const *argv[])
 					fe->fatality_age = 0;
 					fe->fatality_sex = 'Z';
 					// strcpy(fe.fatality_location, fatality_line[6].c_str());
-
 				}
 			}
-			(se.f) = fe; // link the fatality_event to the storm event 
+			(se).f = fe; // link the fatality_event to the storm event 
 
 			// add the storm event to the damn storm event array
 			storm_event *ptr = event;
@@ -634,7 +632,6 @@ int 	main(int argc, char const *argv[])
 		index++; // advance the index
 		table.add_to_table(e);
 	}
-
 	
 	int n_queries = 0;
 
@@ -651,7 +648,6 @@ int 	main(int argc, char const *argv[])
 		queries.push_back(query_);
 		// cin.get();
 	}
-	
 
 	for (int i = 0; i < n_queries; ++i)
 	{
