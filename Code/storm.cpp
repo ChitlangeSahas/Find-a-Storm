@@ -11,9 +11,11 @@
 
 #define ROOT_FOLDER "./"
 
-ArrayList<int> years;
+ArrayList<int> years; // array to hold the years to analyze
 
 using namespace std;
+
+/******************************************HELPER FUNCTIONS START*************************************************/
 
 /*
 * convert the string into vector tokens
@@ -141,17 +143,10 @@ int 	convert_to_digits(string str)
 {
 	char suffix = str[str.length() - 1];
 	int multiplier = 1;
-
 	// 200K
-	if (suffix == 'K')
-	{
-		multiplier = 1000;
-	}
+	if (suffix == 'K') multiplier = 1000;
 	// 10.0M
-	else if(suffix == 'M')
-	{
-		multiplier = 1000000;
-	}
+	else if(suffix == 'M') multiplier = 1000000;
 	
 	string number = "";
 	for (int i = 0; i < str.length() - 1; ++i)
@@ -211,11 +206,13 @@ bool TestForPrime( int val )
     int limit, factor = 2;
 
     limit = (long)( sqrtf( (float) val ) + 0.5f );
-    while( (factor <= limit) && (val % factor) )
-        factor++;
+    while( (factor <= limit) && (val % factor) ) factor++;
 
     return( factor > limit );
 }
+
+/******************************************HELPER FUNCTIONS END *************************************************/
+
 
 int 	main(int argc, char const *argv[])
 {
