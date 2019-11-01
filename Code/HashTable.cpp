@@ -1,6 +1,7 @@
+
 struct hashNode
 {
-	LinkedList list;
+	LinkedList<hash_table_entry> list;
 
 	void print_node()
 	{

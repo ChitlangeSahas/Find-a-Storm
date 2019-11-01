@@ -2,12 +2,13 @@
 * LinkedList Class implementation
 */
 using namespace std;
+template <class T>
 class LinkedList
 {
 private:
 	struct node
 	{
-		hash_table_entry entry;
+		T entry;
 		node *next;
 	};
 public:
@@ -25,7 +26,7 @@ public:
 		return size;
 	}
 
-  void add(hash_table_entry e)
+  void add(T e)
     {
       node *temp=new node;
       temp->entry=e;
@@ -46,7 +47,7 @@ public:
     size++;
     }
 
-    hash_table_entry at(int index)
+    T at(int index)
     {
     	node *n = head;
     	for (int i = 0; i < index; ++i)
@@ -56,9 +57,9 @@ public:
     	return n->entry;
     }
 
-	hash_table_entry find(int event_id)
+	T find(int event_id)
 	{
-		hash_table_entry e;
+		T e;
 			e.event_id = -1;
 		for (int i = 0; i < size; ++i)
 		{

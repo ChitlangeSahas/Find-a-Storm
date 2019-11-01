@@ -22,6 +22,7 @@ public:
     T& back();
     void push_back(const T& value);
     void pop_back();
+    T  pop();
 
     void reserve(unsigned int capacity);
     void resize(unsigned int size);
@@ -69,6 +70,15 @@ void ArrayList<T>::push_back(const T & v) {
         Log++;
     }
     buffer [_size++] = v;
+}
+
+template <class T>
+T  ArrayList<T>::pop()
+{
+    T first = buffer[0];
+    buffer++;
+    _size--;
+    return first;
 }
 
 template<class T>

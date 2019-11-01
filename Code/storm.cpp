@@ -4,12 +4,14 @@
 #include <sstream>
 #include <string.h>
 #include <math.h>
-#include "defn.h"
 #include "ArrayList.cpp"
 #include "LinkedList.cpp"
+#include "defn.h"
 #include "HashTable.cpp"
+#include "bst.cpp"
+#include "MaxHeap.cpp"
 
-#define ROOT_FOLDER "./"
+#define ROOT_FOLDER "./data/"
 
 ArrayList<int> years; // array to hold the years to analyze
 
@@ -99,10 +101,7 @@ ArrayList<string> 	detail_file_to_array_list()
 		getline(file_stream, line); 
 
 		// make a vector 
-		while(getline(file_stream, line).good())
-		{
-			lines.push_back(line);
-		}
+		while(getline(file_stream, line).good()) lines.push_back(line);
 	}
 	return lines;
 }
@@ -130,10 +129,7 @@ ArrayList<string> 	fatalities_file_to_array_list()
 		getline(file_stream, line); 
 
 		// make a vector 
-		while(getline(file_stream, line).good())
-		{
-			lines.push_back(line);
-		}
+		while(getline(file_stream, line).good()) lines.push_back(line);
 	}
 	return lines;
 }
@@ -149,10 +145,7 @@ int 	convert_to_digits(string str)
 	else if(suffix == 'M') multiplier = 1000000;
 	
 	string number = "";
-	for (int i = 0; i < str.length() - 1; ++i)
-	{
-		number += str[i];
-	}
+	for (int i = 0; i < str.length() - 1; ++i) number += str[i];
 
 	int value = stof(number) * multiplier;
 	
@@ -180,21 +173,24 @@ void 	print_storm_event(storm_event se)
 	cout << "DAMAGE CROPS : " << se.damage_crops << "\n";
 	cout << "TOR F Scale : " << se.tor_f_scale << "\n";	 
 
+	cout << "LinkedList Size " << se.f->size << endl;
+	// print the fatalities
 	if (se.deaths_direct != 0 || se.deaths_direct != 0 )
 	{
-		cout << "Fatality Information: " << endl;
-		cout << "FATALITY ID : " << se.f->fatality_id << "\n";
-		cout << "EVENT ID : " << se.f->event_id << "\n";
-		cout << "FATALITY TYPE : " << se.f->fatality_type << "\n";
-		cout << "FATALITY DATE : " << se.f->fatality_date << "\n";
-		cout << "FATALITY AGE : " << "Information N/A"<< "\n";
-		cout << "FATALITY SEX : " << "Information N/A" << "\n";
-		cout << "FATALITY LOC : " << "Information N/A" << "\n";
+		for (int i = 0; i < se.f->size; ++i)
+		{
+			/* code */
+			cout << "Fatality Information: " << endl;
+			cout << "FATALITY ID : " << se.f->at(i).fatality_id << "\n";
+			cout << "EVENT ID : " << se.f->at(i).event_id << "\n";
+			cout << "FATALITY TYPE : " << se.f->at(i).fatality_type << "\n";
+			cout << "FATALITY DATE : " << se.f->at(i).fatality_date << "\n";
+			cout << "FATALITY AGE : " << "Information N/A"<< "\n";
+			cout << "FATALITY SEX : " << "Information N/A" << "\n";
+			cout << "FATALITY LOC : " << "Information N/A" << "\n";
+		}
 	}
-	else
-	{
-		cout << "No Fatalities.\n";
-	}
+	else cout << "No Fatalities.\n";
 	cout << "=====\n";
 }
 
@@ -220,10 +216,7 @@ int 	main(int argc, char const *argv[])
 
 	int n_years = stoi(q[0]);
 
-	for (int i = 0; i < n_years; ++i)
-	{
-		years.push_back(stoi(q[i + 1]));
-	}
+	for (int i = 0; i < n_years; ++i) years.push_back(stoi(q[i + 1]));
 
 	ArrayList<string> details_lines = detail_file_to_array_list();
 	ArrayList<string> fatality_lines = fatalities_file_to_array_list();
@@ -250,6 +243,7 @@ int 	main(int argc, char const *argv[])
 	for (int i = 0; i < TABLE_SIZE; ++i)
 	{
 		ArrayList<string> detail_line = str_to_vector_tokens(details_lines[i], ",");
+		LinkedList<fatality_event> *fatality_event_linked_list = new LinkedList<fatality_event>;
 
 		// make the hash node entry
 		hash_table_entry e;
@@ -294,7 +288,9 @@ int 	main(int argc, char const *argv[])
 					// strcpy(fe.fatality_location, fatality_line[6].c_str());
 				}
 			}
-			(se).f = fe; // link the fatality_event to the storm event 
+			fatality_event_linked_list->add(*fe);
+			se.f = fatality_event_linked_list;
+			// (se).f = fe; // link the fatality_event to the storm event 
 
 			// add the storm event to the damn storm event array
 			storm_event *ptr = event;
@@ -323,6 +319,12 @@ int 	main(int argc, char const *argv[])
 		queries.push_back(query_);
 		// cin.get();
 	}
+
+	ArrayList<storm_event> se_al;
+	storm_event se;
+	se_al.push_back(se);
+
+	MaxHeap max_heap(se_al);
 
 	for (int i = 0; i < n_queries; ++i)
 	{
@@ -360,10 +362,15 @@ int 	main(int argc, char const *argv[])
 				{
 					/* code */
 				}
-				// find max 
+				// find max <number> 
 				else if (is_number(query[2]))
 				{
-					/* code */
+					if (is_number(query[2]) <= 50)
+					{
+						int max_entries = stoi(query[2]);
+
+
+					}
 				}
 				else cout << "INVALID QUERY" << endl;
 			}

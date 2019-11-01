@@ -1,104 +1,49 @@
-#include <stdio.h>
-#include <iostream>
-
-using namespace std;
-template <class T>
-struct node
-{
-	T value;
-	node *left ;
-	node *right;
-
-	void print_node()
-	{
-		cout << value << endl;
-	}
-};
-
-template <class T>
 class bst
 {
-private:
-	node<T> *root;
-	
-	node<T>* newNode(T value)
-	{
-		node<T>* temp = new node<T>;
-		temp->value = value;
-		temp->left = NULL;
-		temp->right = NULL;
-		return temp;
-	}
-	
-	void _print_tree(node<T> *ptr)
-	{
-		if (ptr == NULL) return;
-		else
-		{
-			cout << ptr->value << " ";	
-			_print_tree(ptr->left);
-			_print_tree(ptr->right);
-		}
-	}
-
 public:
-
-	bst()
-	{
-		root = NULL; // initialize with a nullptr
-	};
-	
-
-	void add_to_tree(T value)
-	{	
-		cout << &root << endl;
-		// if the root is empty.
-		if (root == NULL) 
-		{
-			cout << "> root is null, creating a new node at head." << endl;
-			node<T>* ptr =  root; 
-			ptr = newNode(value);
-			ptr->left = newNode(value);
-			ptr->right = newNode(value);
-			cout << &ptr << " " << &root << endl;
-		}
-		// else 
-		// {
-		// 	cout << "> root not null." << endl;
-		// 	node<T> *ptr = root;
-		// 	while(ptr != NULL)
-		// 	{
-		// 		if (value < ptr->value) // add to the left
-		// 		{
-		// 			cout << "> adding " << value << " to the left. " << endl;
-		// 			ptr = ptr->left;
-		// 		}
-		// 		else
-		// 		{
-		// 			cout << "> adding " << value << " to the right. " << endl;
-		// 			ptr = ptr->right;
-		// 		}
-		// 	}
-		// 	ptr = newNode(value);
-		// }
-
-	}
-	// ~bst();
-
-	void print_tree()
-	{
-		_print_tree(root);
-	}
-	
+    bst();
+    ~bst();
+    struct bst_node
+    { // A binary search tree
+        char *s; // String corresponding to either a state or a month_name
+        int event_id; // Identifier of storm event
+        struct bst_node *left;  // Pointer to the left subtree
+        struct bst_node *right;  // Pointer to the right subtree
+    };
+       
+    // A utility function to create a new BST bst_node 
+    struct bst_node *newNode(int item) 
+    { 
+        struct bst_node *temp =  (struct bst_node *)malloc(sizeof(struct bst_node)); 
+        temp->event_id = item; 
+        temp->left = temp->right = NULL; 
+        return temp; 
+    } 
+       
+    // A utility function to do inorder traversal of BST 
+    void inorder(struct bst_node *root) 
+    { 
+        if (root != NULL) 
+        { 
+            inorder(root->left); 
+            printf("%d \n", root->event_id); 
+            inorder(root->right); 
+        } 
+    } 
+       
+    /* A utility function to insert a new bst_node with given event_id in BST */
+    struct bst_node* insert(struct bst_node* bst_node, int event_id) 
+    { 
+        /* If the tree is empty, return a new bst_node */
+        if (bst_node == NULL) return newNode(event_id); 
+      
+        /* Otherwise, recur down the tree */
+        if (event_id < bst_node->event_id) 
+            bst_node->left  = insert(bst_node->left, event_id); 
+        else if (event_id > bst_node->event_id) 
+            bst_node->right = insert(bst_node->right, event_id);    
+      
+        /* return the (unchanged) bst_node pointer */
+        return bst_node; 
+    } 
 };
-
-int main(int argc, char const *argv[])
-{
-	bst<int> tree;
-	tree.add_to_tree(11);
-	tree.add_to_tree(2);
-	tree.add_to_tree(20);
-	tree.print_tree();
-	cout << "Hello" << endl;
-	return 0;
-}
