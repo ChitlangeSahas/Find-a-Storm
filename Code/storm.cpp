@@ -4,10 +4,10 @@
 #include <sstream>
 #include <string.h>
 #include <math.h>
-#include "ArrayList.cpp"
-#include "LinkedList.cpp"
+#include "ArrayList.h"
+#include "LinkedList.h"
 #include "defn.h"
-#include "HashTable.cpp"
+#include "HashTable.h"
 #include "bst.cpp"
 #include "MaxHeap.cpp"
 
@@ -16,6 +16,7 @@
 ArrayList<int> years; // array to hold the years to analyze
 
 using namespace std;
+
 
 /******************************************HELPER FUNCTIONS START*************************************************/
 
@@ -32,6 +33,7 @@ ArrayList<string>  	str_to_vector_tokens(std::string str, std::string delim)
         if (pos == std::string::npos) pos = str.length();
         std::string token = str.substr(prev, pos-prev);
         if (!token.empty()) tokens.push_back(token);
+        else tokens.push_back("");
         prev = pos + delim.length();
     }
     while (pos < str.length() && prev < str.length());
@@ -153,7 +155,7 @@ int 	convert_to_digits(string str)
 }
 
 /*
-* Print the storm event
+* Print the storm storm_event_array
 */
 void 	print_storm_event(storm_event se)
 {
@@ -173,21 +175,30 @@ void 	print_storm_event(storm_event se)
 	cout << "DAMAGE CROPS : " << se.damage_crops << "\n";
 	cout << "TOR F Scale : " << se.tor_f_scale << "\n";	 
 
-	cout << "LinkedList Size " << se.f->size << endl;
 	// print the fatalities
 	if (se.deaths_direct != 0 || se.deaths_direct != 0 )
 	{
 		for (int i = 0; i < se.f->size; ++i)
 		{
-			/* code */
+			cout << "=============" << endl;
 			cout << "Fatality Information: " << endl;
 			cout << "FATALITY ID : " << se.f->at(i).fatality_id << "\n";
 			cout << "EVENT ID : " << se.f->at(i).event_id << "\n";
 			cout << "FATALITY TYPE : " << se.f->at(i).fatality_type << "\n";
 			cout << "FATALITY DATE : " << se.f->at(i).fatality_date << "\n";
-			cout << "FATALITY AGE : " << "Information N/A"<< "\n";
-			cout << "FATALITY SEX : " << "Information N/A" << "\n";
-			cout << "FATALITY LOC : " << "Information N/A" << "\n";
+			
+			cout << "FATALITY AGE : " ; 
+			if (se.f->at(i).fatality_age != -1) cout << se.f->at(i).fatality_age << endl;
+			else cout << "Information N/A"<< "\n";
+
+			cout << "FATALITY SEX : " ; 
+			if (se.f->at(i).fatality_sex != ' ') cout << se.f->at(i).fatality_sex << endl;
+			else cout << "Information N/A"<< "\n";
+
+			cout << "FATALITY LOC : " ; 
+			if (se.f->at(i).fatality_location[0] != ' ') cout << se.f->at(i).fatality_location << endl;
+			else cout << "Information N/A"<< "\n";
+			cout << "=============" << endl;
 		}
 	}
 	else cout << "No Fatalities.\n";
@@ -203,7 +214,6 @@ bool TestForPrime( int val )
 
     limit = (long)( sqrtf( (float) val ) + 0.5f );
     while( (factor <= limit) && (val % factor) ) factor++;
-
     return( factor > limit );
 }
 
@@ -238,7 +248,7 @@ int 	main(int argc, char const *argv[])
 	}
 
 	HashTable table(next_prime_number_table_size);
-	storm_event *event = (storm_event*) malloc(next_prime_number_table_size * sizeof(storm_event));
+	storm_event *storm_event_array = (storm_event*) malloc(next_prime_number_table_size * sizeof(storm_event));
 
 	for (int i = 0; i < TABLE_SIZE; ++i)
 	{
@@ -251,7 +261,7 @@ int 	main(int argc, char const *argv[])
 			e.event_index = index;
 			e.year = stoi(detail_line[2]);
 
-		// add the storm event to the entry
+		// add the storm storm_event_array to the entry
 		storm_event se;
 			se.event_id = stoi(detail_line[0]);
 			strcpy(se.state, detail_line[1].c_str());
@@ -269,7 +279,7 @@ int 	main(int argc, char const *argv[])
 			strcpy(se.tor_f_scale, detail_line[13].c_str());
 
 			
-			// add the fatality event to the entry
+			// add the fatality storm_event_array to the entry
 			fatality_event *fe = new fatality_event;
 			for (int j = 0; j < fatality_lines.size(); ++j)
 			{
@@ -282,18 +292,26 @@ int 	main(int argc, char const *argv[])
 					fe->event_id = stoi(fatality_line[1]);
 					fe->fatality_type = fatality_line[2][0];
 					strcpy(fe->fatality_date, fatality_line[3].c_str());
+					
+					if (fatality_line[4] != "") fe->fatality_age = stoi(fatality_line[4]);
+					else fe->fatality_age = -1;
 
-					fe->fatality_age = 0;
-					fe->fatality_sex = 'Z';
-					// strcpy(fe.fatality_location, fatality_line[6].c_str());
+					if (fatality_line[5] != "") fe->fatality_sex = stoi(fatality_line[4]);
+					else fe->fatality_sex = ' ';
+
+					if (fatality_line[6] != "") 
+					{
+						for (int i = 0; i < 25; ++i) fe->fatality_location[i] = fatality_line[6][i];
+					}
+					else fe->fatality_location[0] = ' ';
+					
+					fatality_event_linked_list->add(*fe);
 				}
 			}
-			fatality_event_linked_list->add(*fe);
 			se.f = fatality_event_linked_list;
-			// (se).f = fe; // link the fatality_event to the storm event 
 
-			// add the storm event to the damn storm event array
-			storm_event *ptr = event;
+			// add the storm event to the damn storm storm_event_array array
+			storm_event *ptr = storm_event_array;
 			for (int i = 0; i < index; ++i)
 			{
 				ptr++;
@@ -317,14 +335,7 @@ int 	main(int argc, char const *argv[])
 		query_ = "";
 		getline(cin, query_);
 		queries.push_back(query_);
-		// cin.get();
 	}
-
-	ArrayList<storm_event> se_al;
-	storm_event se;
-	se_al.push_back(se);
-
-	MaxHeap max_heap(se_al);
 
 	for (int i = 0; i < n_queries; ++i)
 	{
@@ -339,7 +350,7 @@ int 	main(int argc, char const *argv[])
 				hash_table_entry entry_found = table.find(stoi(query[2]));
 				int ei = entry_found.event_index;
 
-				storm_event *ptr = event;
+				storm_event *ptr = storm_event_array;
 				for (int j = 0; j < ei; ++j)
 				{
 					ptr++;
@@ -368,8 +379,85 @@ int 	main(int argc, char const *argv[])
 					if (is_number(query[2]) <= 50)
 					{
 						int max_entries = stoi(query[2]);
+						int year = stoi(query[3]);
 
+						if (query[4] == "damage_crops")
+						{
+							storm_event * year_event_array = storm_event_array;
 
+							int size = 0;
+							while(year_event_array[size].event_id) size++; 
+							int n_entries = 0;
+							while(year_event_array[n_entries].year == year) n_entries++;
+							storm_event * copy_year_event_array = (storm_event*) malloc(sizeof(storm_event) *  n_entries);
+							storm_event * ptr = copy_year_event_array;
+							
+							cout << "Size of storm event array = " << size << endl;
+
+							int j = 0;
+							for (int i = 0; i < size; ++i)
+							{
+								if (year_event_array[i].year == year)
+								{	
+									*ptr = year_event_array[i];
+									ptr++;
+								}
+							}
+							
+							MaxHeap heap(copy_year_event_array , n_entries, "damage_crops");
+
+							for (int i = 0; i < max_entries; ++i)
+							{
+								print_storm_event(heap.extract_max());
+							}
+
+						}
+						else if(query[4] == "damage_property")
+						{
+							storm_event * year_event_array = storm_event_array;
+
+							int size = 0;
+							while(year_event_array[size].event_id) size++; 
+							int n_entries = 0;
+							while(year_event_array[n_entries].year == year) n_entries++;
+							storm_event * copy_year_event_array = (storm_event*)malloc(sizeof(storm_event) *  n_entries);
+							storm_event * ptr = copy_year_event_array;
+							
+							cout << "Size of storm event array = " << size << endl;
+
+							int j = 0;
+							for (int i = 0; i < size; ++i)
+							{
+								if (year_event_array[i].year == year)
+								{	
+									*ptr = year_event_array[i];
+									ptr++;
+								}
+							}
+							
+							MaxHeap heap(copy_year_event_array , n_entries, "damage_property");
+
+							for (int i = 0; i < max_entries; ++i)
+							{
+								print_storm_event(heap.extract_max());
+							}
+						}
+
+					}
+
+				}
+				else if (query[3] == "all")
+				{
+					int max_entries = stoi(query[2]);
+					storm_event * year_event_array = storm_event_array;
+					int n_entries = 0;
+					while(year_event_array[n_entries++].year);
+					
+					MaxHeap heap(year_event_array , n_entries, "damage_property");
+
+					for (int i = 0; i < max_entries; ++i)
+					{
+						print_storm_event(heap.extract_max());
 					}
 				}
 				else cout << "INVALID QUERY" << endl;

@@ -1,17 +1,20 @@
 #include <iostream>
-// #include "ArrayList.cpp"
-// #include "defn.h"
 
 using namespace std;
 class MaxHeap
 {
 private:
-	ArrayList<storm_event> arr;
+	int size = 0;
+	storm_event *arr;
+	string sort_by;
 public:
-	MaxHeap(ArrayList<storm_event> array_list)
+
+	MaxHeap(storm_event* array_list, int s , string _sort_by)
 	{
 		arr = array_list;
-		convertMaxHeap(arr.size());
+		size = s;
+		sort_by = _sort_by;
+		convertMaxHeap(size);
 	};
 	// ~MaxHeap();
 	  
@@ -20,16 +23,33 @@ public:
 	{ 
 	    int l = 2*i + 1; 
 	    int r = 2*i + 2; 
-	    int largest = i; 
-	    if (l < n && ((arr[l]).damage_crops) > (arr[i]).damage_crops) 
-	        largest = l; 
-	    if (r < n && arr[r].damage_crops > arr[largest].damage_crops) 
-	        largest = r; 
-	    if (largest != i) 
-	    { 
-	        swap(arr[i], arr[largest]); 
-	        MaxHeapify(largest, n); 
-	    } 
+	    int largest = i;
+
+	    if (sort_by == "damage_crops")
+	    {    	
+		    if (l < n && ( (arr[l]).damage_crops) > (arr[i]).damage_crops ) 
+		        largest = l; 
+		    if (r < n && arr[r].damage_crops > arr[largest].damage_crops) 
+		        largest = r; 
+		    if (largest != i) 
+		    { 
+		        swap(arr[i], arr[largest]); 
+		        MaxHeapify(largest, n); 
+		    } 
+	    }
+	    else if(sort_by == "damage_property")
+	    {
+	        if (l < n && ((arr[l]).damage_property) > (arr[i]).damage_property) 
+		        largest = l; 
+		    if (r < n && arr[r].damage_property > arr[largest].damage_property) 
+		        largest = r; 
+		    if (largest != i) 
+		    { 
+		        swap(arr[i], arr[largest]); 
+		        MaxHeapify(largest, n); 
+		    } 
+	    }
+
 	} 
 	  
 	// This function basically builds max heap 
@@ -46,15 +66,17 @@ public:
 	// of given size 
 	void printHeap() 
 	{ 
-	    for (int i = 0; i < arr.size(); ++i) 
+	    for (int i = 0; i < size; ++i) 
 	        cout << arr[i].event_id << " "; 
 	    cout << endl;
 	}
 
   	storm_event 	extract_max()
   	{
-  		storm_event max = arr.pop();
-  		convertMaxHeap(arr.size());
+  		storm_event max = arr[0];
+  		arr++;
+  		size--;
+  		convertMaxHeap(size);
   		return max;
   	}
 };

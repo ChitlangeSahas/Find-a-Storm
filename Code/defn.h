@@ -45,6 +45,8 @@ struct hash_table_entry{
     int event_index; // For the given year, the index into array of storm events
 };
 
+	
+
 // struct bst{ // A binary search tree
 //     char *s; // String corresponding to either a state or a month_name
 //     int event_id; // Identifier of storm event
