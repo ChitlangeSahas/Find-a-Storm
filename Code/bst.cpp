@@ -1,49 +1,198 @@
+#include <stdio.h>
+#include <iostream>
+
+using namespace std;
+
+struct bst_node
+{ // A binary search tree
+    char *s; // String corresponding to either a state or a month_name
+    int event_id ; // Identifier of storm event
+    bst_node *left;  // Pointer to the left subtree
+    bst_node *right;  // Pointer to the right subtree
+};
+
 class bst
 {
-public:
-    bst();
-    ~bst();
-    struct bst_node
-    { // A binary search tree
-        char *s; // String corresponding to either a state or a month_name
-        int event_id; // Identifier of storm event
-        struct bst_node *left;  // Pointer to the left subtree
-        struct bst_node *right;  // Pointer to the right subtree
-    };
-       
+private:
+    string bst_by;
+    bst_node * root ;
+    int size;
+    HashTable *lookup_table;
+    storm_event * lookup_array;
+
     // A utility function to create a new BST bst_node 
-    struct bst_node *newNode(int item) 
+    bst_node *newNode(char* str, int _event_id ) 
     { 
-        struct bst_node *temp =  (struct bst_node *)malloc(sizeof(struct bst_node)); 
-        temp->event_id = item; 
-        temp->left = temp->right = NULL; 
+        bst_node *temp =  (bst_node *) malloc(sizeof(bst_node));
+        temp->s = str;
+        temp->right = temp ->left = NULL;
+        temp->event_id = _event_id; 
         return temp; 
     } 
-       
+
+public:
+    bst(storm_event * arr , int s, string _bst_by, char* l, char* r, HashTable h, storm_event* array)
+    {
+        size = s;
+        bst_by = _bst_by;
+        lookup_table = &h;
+        lookup_array = array;
+
+        if (bst_by == "state")root = newNode(arr[0].state, arr[0].event_id);
+        if (bst_by == "month_name")root = newNode(arr[0].month_name, arr[0].event_id);
+
+        for (int i = 1 ; i < s; ++i)
+        {
+            if (bst_by == "state")
+            {
+                insert(root, arr[i].state, arr[i].event_id);              
+            }
+            else if (bst_by == "month_name")
+            {
+                insert(root, arr[i].month_name, arr[i].event_id);
+            }
+        }
+
+        if (bst_by == "state")print_within_range_states(root, l, r);
+        if (bst_by == "month_name")print_within_range_months(root, l, r);
+        
+    };
+    // ~bst();
+           
     // A utility function to do inorder traversal of BST 
-    void inorder(struct bst_node *root) 
+    void inorder(struct bst_node *r) 
     { 
-        if (root != NULL) 
+        if (r != NULL) 
         { 
-            inorder(root->left); 
-            printf("%d \n", root->event_id); 
-            inorder(root->right); 
+            inorder(r->left); 
+            cout << r->event_id << endl; 
+            inorder(r->right); 
         } 
     } 
-       
-    /* A utility function to insert a new bst_node with given event_id in BST */
-    struct bst_node* insert(struct bst_node* bst_node, int event_id) 
+
+    void print_bst()
+    {
+        inorder(root);
+    }
+
+    struct bst_node* insert(struct bst_node* node, char* month, int event_id) 
     { 
-        /* If the tree is empty, return a new bst_node */
-        if (bst_node == NULL) return newNode(event_id); 
-      
+        /* If the tree is empty, return a new node */
+        if (node == NULL) return newNode(month, event_id); 
+
+        int v = strcmp(month, node->s);      
         /* Otherwise, recur down the tree */
-        if (event_id < bst_node->event_id) 
-            bst_node->left  = insert(bst_node->left, event_id); 
-        else if (event_id > bst_node->event_id) 
-            bst_node->right = insert(bst_node->right, event_id);    
+        if (v <= 0) 
+        {
+            node->left  = insert(node->left, month, event_id); 
+        }
+        else if (v > 0) 
+        {
+            node->right = insert(node->right, month, event_id);  
+        }  
       
-        /* return the (unchanged) bst_node pointer */
-        return bst_node; 
+        /* return the (unchanged) node pointer */
+        return node; 
     } 
+
+    void print_month_node(hash_table_entry e)
+    {
+        cout << "========= By Month Information =========" << endl;
+        cout << "MONTH NAME\t" << lookup_array[e.event_index].month_name << endl; 
+        cout << "EVENT ID\t" << lookup_array[e.event_index].event_id << endl;
+        cout << "YEAR\t\t"     << lookup_array[e.event_index].year << endl;
+        cout << "EVENT TYPE\t" << lookup_array[e.event_index].event_type << endl;
+        cout << "CZ TYPE\t\t" << lookup_array[e.event_index].cz_type << endl;
+        cout << "CZ NAME\t\t" << lookup_array[e.event_index].cz_name << endl;
+        cout << "========================================" << endl;
+        
+    }
+    void print_state_node(hash_table_entry e)
+    {
+        cout << "========= By State Information =========" << endl;
+        cout << "STATE \t\t" << lookup_array[e.event_index].state << endl; 
+        cout << "EVENT ID\t" << lookup_array[e.event_index].event_id << endl;
+        cout << "YEAR\t\t"     << lookup_array[e.event_index].year << endl;
+        cout << "EVENT TYPE\t" << lookup_array[e.event_index].event_type << endl;
+        cout << "CZ TYPE\t\t" << lookup_array[e.event_index].cz_type << endl;
+        cout << "CZ NAME\t\t" << lookup_array[e.event_index].cz_name << endl;
+        cout << "========================================" << endl;
+        
+    }
+
+    void print_within_range_months(bst_node *root, char* k1, char* k2)  
+    {  
+        /* base case */
+        if ( NULL == root )  
+            return;  
+
+        int v1 = strcmp(k1, root->s); 
+        int v2 = strcmp(k2 , root->s);
+        
+        /* Since the desired o/p is sorted,  
+        recurse for left subtree first  
+        If root->data is greater than k1,  
+        then only we can get o/p keys  
+        in left subtree */
+        
+        if ( v1 <= 0 )  
+        {
+            print_within_range_months(root->left, k1, k2);  
+        }
+          
+        /* if root's data lies in range,  
+        then prints root's data */
+        if ( v1 <= 0 && v2 >= 0 )  
+        {  
+            print_month_node(lookup_table->find(root->event_id)); 
+        }
+          
+        /* If root->data is smaller than k2, 
+            then only we can get o/p keys  
+            in right subtree */
+        if ( v2 >= 0 )  
+        {
+            print_within_range_months(root->right, k1, k2);  
+        }
+    } 
+
+    void print_within_range_states(bst_node *root, char* k1, char* k2)  
+    {  
+        /* base case */
+        if ( NULL == root )  
+            return;  
+        
+        /* Since the desired o/p is sorted,  
+        recurse for left subtree first  
+        If root->data is greater than k1,  
+        then only we can get o/p keys  
+        in left subtree */
+        
+        if ( k1[0] <= root->s[0] )  
+        {
+            // cout << root->s  << " " << k1 << endl;
+            print_within_range_states(root->left, k1, k2);  
+        }
+          
+        /* if root's data lies in range,  
+        then prints root's data */
+        if (  k1[0] <= root->s[0] && k2[0] >= root->s[0] )  
+        {
+            // cout << " ** " << endl;
+            // cout << k1 << " <= " << root->s << endl;
+            // cout << k2 << " >= " << root->s << endl;
+            // cout << " ** " << endl;
+            cout << root->s << "\t" << root->event_id << endl;   
+            print_state_node(lookup_table->find(root->event_id));
+        }
+          
+        /* If root->data is smaller than k2, 
+            then only we can get o/p keys  
+            in right subtree */
+        if (  k2[0] >= root->s[0] )  
+        {
+            // cout << root->s  << " " << k2 << endl;
+            print_within_range_states(root->right, k1, k2);  
+        }
+    }   
 };

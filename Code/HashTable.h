@@ -40,15 +40,16 @@ private:
 
 	hashNode *hash_table_head;
 	hashNode *ptr;
+	int elements = 0;
 
 public:
 	/*
 	* constructor
 	*/
-	HashTable(int TABLE_SIZE)
+	HashTable(int TABLE_SIZE, int n_elements)
 	{
 		T_SIZE = TABLE_SIZE;
-
+		elements = n_elements;
 		hash_table_head = (hashNode*) malloc(TABLE_SIZE * sizeof(hashNode));
 		hashNode *ptr = hash_table_head;
 		
@@ -124,5 +125,62 @@ public:
 		return n.find(event_id);
 	}
 
+	bool has(int arr[], int key)
+	{
+		for (int i = 0; i < T_SIZE; ++i)
+		{
+			if (arr[i] == key)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	int frequency(int a[], int n, int x) 
+	{ 
+    	int count = 0; 
+    	for (int i=0; i < n; i++) 
+       	if (a[i] == x)  
+          	count++; 
+    	return count; 
+	}
+
+	void print_chain_lengths_frequency()
+	{
+		// worst case T_SIZE different Lengths
+		int keys[T_SIZE] = {-1};
+		for (int i = 0; i < T_SIZE; ++i) keys[i] = -1;
+
+		hashNode *c = hash_table_head;
+		int lengths[T_SIZE];
+		for (int i = 0; i < T_SIZE; ++i) lengths[i] = -1;
+
+		for (int i = 0; i < T_SIZE; ++i)
+		{
+			if (!has(keys, c->size()))
+			{
+				int j = 0;
+				while(keys[j] != -1) j++;
+
+				keys[j] = c->size();
+			}
+			// cout << c->size() << endl;
+			lengths[i] = c->size();
+			c++;
+		}
+		int i = 0;
+		while(keys[i] != -1) i++;
+
+		cout << "Length (l)\tNumber of times" << endl;
+		for (int j = 0; j < i; ++j)
+		{
+			cout << keys[j] << "\t\t" << frequency(lengths, T_SIZE, keys[j]) << endl;
+		}
+		// load factor.
+
+		cout << "Load Factor for this Hash table : " << (float) elements / T_SIZE  << endl;
+
+	}
 	// ~HashTable();
 };

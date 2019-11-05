@@ -8,8 +8,8 @@
 #include "LinkedList.h"
 #include "defn.h"
 #include "HashTable.h"
-#include "bst.cpp"
 #include "MaxHeap.cpp"
+#include "bst.cpp"
 
 #define ROOT_FOLDER "./data/"
 
@@ -159,7 +159,7 @@ int 	convert_to_digits(string str)
 */
 void 	print_storm_event(storm_event se)
 {
-	cout << "=====" << endl;
+	cout << "*************" << endl;
 	cout << "EVENT ID : " << se.event_id << "\n";
 	cout << "STATE : " << se.state << "\n";	
 	cout << "YEAR : " << se.year << "\n";	
@@ -202,7 +202,7 @@ void 	print_storm_event(storm_event se)
 		}
 	}
 	else cout << "No Fatalities.\n";
-	cout << "=====\n";
+	cout << "*************\n";
 }
 
 /*
@@ -217,6 +217,22 @@ bool TestForPrime( int val )
     return( factor > limit );
 }
 
+void print_heap_information(MaxHeap h)
+{
+	cout << "/**************** HEAP INFORMATION ****************/" << endl;
+	cout << "Number of nodes in the heap : " << h.get_heap_size() << endl;
+	cout << "Height of the Heap : " << h.height() << endl;
+	cout << "Height of the left Subtree " << h.height_left_subtree() << endl;
+	cout << "Height of the right Subtree " << h.height_right_subtree() << endl;
+	cout << "/**************************************************/" << endl;
+}
+
+void print_HashTable_information(HashTable t)
+{
+	cout << "/************* HASH-TABLE INFORMATION **************/" << endl;
+	cout << "Printing each chain length : " << endl;
+	t.print_chain_lengths_frequency();
+}
 /******************************************HELPER FUNCTIONS END *************************************************/
 
 
@@ -247,7 +263,7 @@ int 	main(int argc, char const *argv[])
 		}		
 	}
 
-	HashTable table(next_prime_number_table_size);
+	HashTable table(next_prime_number_table_size, TABLE_SIZE);
 	storm_event *storm_event_array = (storm_event*) malloc(next_prime_number_table_size * sizeof(storm_event));
 
 	for (int i = 0; i < TABLE_SIZE; ++i)
@@ -371,7 +387,55 @@ int 	main(int argc, char const *argv[])
 				// find max fatality
 				if (query[2] == "fatality")
 				{
-					/* code */
+					int max_entries = stoi(query[3]);
+
+					if (is_number(query[4]))
+					{
+						int year = stoi(query[4]);
+						storm_event * year_event_array = storm_event_array;
+
+						int size = 0;
+						while(year_event_array[size].event_id) size++; 
+						int n_entries = 0;
+						while(year_event_array[n_entries].year == year) n_entries++;
+						storm_event * copy_year_event_array = (storm_event*) malloc(sizeof(storm_event) *  n_entries);
+						storm_event * ptr = copy_year_event_array;
+
+						int j = 0;
+						for (int i = 0; i < size; ++i)
+						{
+							if (year_event_array[i].year == year)
+							{	
+								*ptr = year_event_array[i];
+								ptr++;
+							}
+						}
+						
+						MaxHeap heap(copy_year_event_array , n_entries, "fatality");
+
+						for (int i = 0; i < max_entries; ++i)
+						{
+							print_storm_event(heap.extract_max());
+						}
+
+						print_heap_information(heap); // TODO
+
+					}
+					else if (query[4] == "all")
+					{
+						storm_event * year_event_array = storm_event_array;
+						int n_entries = 0;
+						while(year_event_array[n_entries++].year);
+
+						MaxHeap heap(year_event_array , n_entries, "fatality");
+
+						for (int i = 0; i < max_entries; ++i)
+						{
+							print_storm_event(heap.extract_max());
+						}
+						print_heap_information(heap);
+					}
+
 				}
 				// find max <number> 
 				else if (is_number(query[2]))
@@ -391,8 +455,6 @@ int 	main(int argc, char const *argv[])
 							while(year_event_array[n_entries].year == year) n_entries++;
 							storm_event * copy_year_event_array = (storm_event*) malloc(sizeof(storm_event) *  n_entries);
 							storm_event * ptr = copy_year_event_array;
-							
-							cout << "Size of storm event array = " << size << endl;
 
 							int j = 0;
 							for (int i = 0; i < size; ++i)
@@ -410,6 +472,7 @@ int 	main(int argc, char const *argv[])
 							{
 								print_storm_event(heap.extract_max());
 							}
+							print_heap_information(heap);
 
 						}
 						else if(query[4] == "damage_property")
@@ -422,8 +485,6 @@ int 	main(int argc, char const *argv[])
 							while(year_event_array[n_entries].year == year) n_entries++;
 							storm_event * copy_year_event_array = (storm_event*)malloc(sizeof(storm_event) *  n_entries);
 							storm_event * ptr = copy_year_event_array;
-							
-							cout << "Size of storm event array = " << size << endl;
 
 							int j = 0;
 							for (int i = 0; i < size; ++i)
@@ -441,8 +502,8 @@ int 	main(int argc, char const *argv[])
 							{
 								print_storm_event(heap.extract_max());
 							}
+							print_heap_information(heap);
 						}
-
 					}
 
 				}
@@ -452,7 +513,7 @@ int 	main(int argc, char const *argv[])
 					storm_event * year_event_array = storm_event_array;
 					int n_entries = 0;
 					while(year_event_array[n_entries++].year);
-					
+
 					MaxHeap heap(year_event_array , n_entries, "damage_property");
 
 					for (int i = 0; i < max_entries; ++i)
@@ -470,12 +531,55 @@ int 	main(int argc, char const *argv[])
 			// range all
 		  	if (query[1] == "all")
 		  	{
-		  		/* code */
+				storm_event * year_event_array = storm_event_array;
+		  		string l = query[3];
+		  		string r = query[4];
+
+		  		char l_cstr[l.size() + 1];
+				strcpy(l_cstr, l.c_str());
+
+				char r_cstr[l.size() + 1];
+				strcpy(r_cstr, r.c_str());
+
+				int size = 0;
+				while(year_event_array[size].event_id) size++;
+
+		  		bst b(year_event_array, size, query[2], l_cstr , r_cstr, table, storm_event_array);
 		  	}
 		  	// range <yyyy> 
 		  	else if (is_number(query[1]))
 		  	{
-		  		/* code */
+		  		int year = stoi(query[1]);
+
+		  		storm_event * year_event_array = storm_event_array;
+		  		string l = query[3];
+		  		string r = query[4];
+
+		  		char l_cstr[l.size() + 1];
+				strcpy(l_cstr, l.c_str());
+
+				char r_cstr[l.size() + 1];
+				strcpy(r_cstr, r.c_str());
+
+				int size = 0;
+				while(year_event_array[size].event_id) size++;
+				int n_entries = 0;
+				while(year_event_array[n_entries].year == year) n_entries++;
+				storm_event * copy_year_event_array = (storm_event*) malloc(sizeof(storm_event) *  n_entries);
+				storm_event * ptr = copy_year_event_array;
+
+				int j = 0;
+				for (int i = 0; i < size; ++i)
+				{
+					if (year_event_array[i].year == year)
+					{	
+						*ptr = year_event_array[i];
+						ptr++;
+					}
+				}
+
+		  		bst b(copy_year_event_array, n_entries, query[2], l_cstr , r_cstr, table, storm_event_array);
+		  		// b.print_bst();
 		  	}
 		  	else cout << "INVALID QUERY" << endl;
 		}
@@ -493,6 +597,8 @@ int 	main(int argc, char const *argv[])
 			
 		}
 		else cout << "INVALID QUERY" << endl;
+
+		print_HashTable_information(table);
 	}
 
 	return 0;

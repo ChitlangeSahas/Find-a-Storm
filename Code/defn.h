@@ -22,7 +22,7 @@ struct fatality_event{
 };
 
 struct storm_event{
-	int event_id; // Event id
+	int event_id ; // Event id
 	char state[ STATE_LEN ]; // State name
 	int year; // Four digit year of event
 	char month_name[ MONTH_LEN ]; // Month of event

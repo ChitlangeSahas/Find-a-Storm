@@ -27,7 +27,7 @@ public:
 
 	    if (sort_by == "damage_crops")
 	    {    	
-		    if (l < n && ( (arr[l]).damage_crops) > (arr[i]).damage_crops ) 
+		    if (l < n && ( (arr[l]).damage_crops) > (arr[i]).damage_crops) 
 		        largest = l; 
 		    if (r < n && arr[r].damage_crops > arr[largest].damage_crops) 
 		        largest = r; 
@@ -42,6 +42,18 @@ public:
 	        if (l < n && ((arr[l]).damage_property) > (arr[i]).damage_property) 
 		        largest = l; 
 		    if (r < n && arr[r].damage_property > arr[largest].damage_property) 
+		        largest = r; 
+		    if (largest != i) 
+		    { 
+		        swap(arr[i], arr[largest]); 
+		        MaxHeapify(largest, n); 
+		    } 
+	    }
+	    else if(sort_by == "fatality")
+	    {
+	        if (l < n && ((arr[l]).f->size > (arr[i]).f->size)) 
+		        largest = l; 
+		    if (r < n && ((arr[r].f->size > arr[largest].f->size))) 
 		        largest = r; 
 		    if (largest != i) 
 		    { 
@@ -79,4 +91,44 @@ public:
   		convertMaxHeap(size);
   		return max;
   	}
+
+  	int get_heap_size()
+  	{
+  		return size;
+  	}
+
+  	int height() 
+	{ 
+    	return ceil(log2(size + 1)) - 1; 
+	} 	
+
+  	int height_left_subtree() 
+	{ 
+		int height = 0;
+		int l = 1;
+
+		while(arr[l].event_id != 0)
+		{
+			height++;
+			l = 2*l + 1;
+		}
+ 		
+ 		return height;
+	} 	
+
+	int height_right_subtree() 
+	{ 
+		int height = 0;
+		int r = 2;
+
+		while(arr[r].event_id != 0)
+		{
+			height++;
+			r = 2*r + 2;
+		}
+ 		
+ 		return height;
+	}
+
+  
 };
