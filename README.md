@@ -9,7 +9,13 @@ The storm event data will be indexed by a __hash table__, and a __binary search 
 
 ## How to use the program
 Run the program with the following in the `cmd` line: <br>
-`>> storm <n>` where `n` is the number of queries the user wants to perform. The following queries are supported at the moment.: 
+  * `>> storm n <n YYYY args>` <br>
+  * Example: <br>
+    * `>> storm 1 1950`<br>
+    * `>> storm 3 1950 1951 1952`
+<br>
+
+User can run the following queries after running the previous command :<br>
   * `find event <event id>` : searches the __hash table__ for the storm event with identifier event id. Example: 
      * `find event 383097 // find event with event_id 383097  
   * `find max <number> <YYYY> <damage type>` : where `number` is an `int` ≤ 50, YYYY is either a specific four digit year or the literal     `"all"`, and damage type is either `damage_property` or `damage_crops`. 
