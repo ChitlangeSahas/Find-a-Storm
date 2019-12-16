@@ -14,7 +14,6 @@ Run the program with the following in the `cmd` line: <br>
     * `>> storm 1 1950`<br>
     * `>> storm 3 1950 1951 1952`
 <br>
-
 User can run the following queries after running the previous command :<br>
   * `find event <event id>` : searches the __hash table__ for the storm event with identifier event id. Example: 
      * `find event 383097 // find event with event_id 383097  
