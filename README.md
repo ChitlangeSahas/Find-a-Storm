@@ -1,7 +1,7 @@
 # Find-a-Storm
-Storm data, provided by the *National Weather Service (NWS)*, contain a chronological listing, by state, of
-hurricanes, tornadoes, thunderstorms, hail, floods, drought conditions, lightning, high winds, snow, temperature extremes and other weather phenomena. The data also contain statistics on personal injuries and
-damage estimates.<br>
+Storm data provided by the *National Weather Service (NWS)* contains a chronological listing, by state, of
+hurricanes, tornadoes, thunderstorms, hail, floods, drought conditions, lightning, high winds, snow, temperature extremes and other weather phenomena. The data also contain statistics on personal injuries and damage estimates.<br>
+
 This project goal of this project is to implement a `storm event` application that manages storm event
 data and uses it to answer queries meeting given selection criteria. <br>
 
@@ -25,8 +25,6 @@ literal `all`, where `field name` is either `state` or `month_name`, and `low` a
      * `range 1950 state A C // all storms in states alphabetically from A to C in 1950`
      * `range all month name January January // all storms in January in all years`
 
-
-
 ## The Storm and Fatality Event Data Format
 
   * There are two types of data files :
@@ -48,11 +46,11 @@ literal `all`, where `field name` is either `state` or `month_name`, and `low` a
       * `damage crops`: The estimated amount of damage to crops incurred by the weather event e.g., 10.00K = $10,000; 10.00M = $10,000,000. Examples: 0.00K, 500.00K, 15.00M.
       * `tor f scale`: Enhanced Fujita Scale describes the strength of the tornado based on the amount and type of damage caused by the tornado. The F-scale of damage varies in the destruction area; therefore, the highest value of the F-scale is recorded for each event. Examples: EF0, EF1, EF2, EF3, EF4, EF5
      * Data columns in the fatalities-YYYY.csv files:
-      * `fatality id`: An identifier assigned by NWS to denote the individual fatality that occurred within a storm event. Example: 17582.
-      * `event id`: An identifier assigned by NWS to denote a specific storm event; it links the fatality with the storm event in the details-YYYY.csv file. Example: 383097.
-      * `fatality type`: D represents a direct fatality, whereas I represents an indirect fatality. Example: D.
-      * `fatality date`: Date and time of fatality in MM/DD/YYYY HH:MM:SS format, 24 hour time. Example: 04/03/2012 12:00:00.
-      * `fatality age`: The age of the person suffering the fatality. Example: 38.
-      * `fatality sex`: The gender of the person suffering the fatality. Example: F.
-      * `fatality location`: The fatality locations permitted are listed in Table 2, spelled out. Example: Under Tree.
+       * `fatality id`: An identifier assigned by NWS to denote the individual fatality that occurred within a storm event. Example: 17582.
+       * `event id`: An identifier assigned by NWS to denote a specific storm event; it links the fatality with the storm event in the details-YYYY.csv file. Example: 383097.
+       * `fatality type`: D represents a direct fatality, whereas I represents an indirect fatality. Example: D.
+       * `fatality date`: Date and time of fatality in MM/DD/YYYY HH:MM:SS format, 24 hour time. Example: 04/03/2012 12:00:00.
+       * `fatality age`: The age of the person suffering the fatality. Example: 38.
+       * `fatality sex`: The gender of the person suffering the fatality. Example: F.
+       * `fatality location`: The fatality locations permitted are listed in Table 2, spelled out. Example: Under Tree.
 
