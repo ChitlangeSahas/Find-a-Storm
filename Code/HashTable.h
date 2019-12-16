@@ -149,7 +149,7 @@ public:
 	void print_chain_lengths_frequency()
 	{
 		// worst case T_SIZE different Lengths
-		int keys[T_SIZE] = {-1};
+		int keys[T_SIZE] ;
 		for (int i = 0; i < T_SIZE; ++i) keys[i] = -1;
 
 		hashNode *c = hash_table_head;

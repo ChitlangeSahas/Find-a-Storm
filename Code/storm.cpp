@@ -11,7 +11,7 @@
 #include "MaxHeap.cpp"
 #include "bst.cpp"
 
-#define ROOT_FOLDER "./data/"
+#define ROOT_FOLDER "./"
 
 ArrayList<int> years; // array to hold the years to analyze
 
@@ -579,7 +579,7 @@ int 	main(int argc, char const *argv[])
 				}
 
 		  		bst b(copy_year_event_array, n_entries, query[2], l_cstr , r_cstr, table, storm_event_array);
-		  		// b.print_bst();
+		  		b.print_bst_information();
 		  	}
 		  	else cout << "INVALID QUERY" << endl;
 		}

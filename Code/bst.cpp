@@ -107,6 +107,7 @@ public:
         cout << "========================================" << endl;
         
     }
+
     void print_state_node(hash_table_entry e)
     {
         cout << "========= By State Information =========" << endl;
@@ -167,8 +168,10 @@ public:
         If root->data is greater than k1,  
         then only we can get o/p keys  
         in left subtree */
+        int v1 = strcmp(k1, root->s); 
+        int v2 = strcmp(k2 , root->s);
         
-        if ( k1[0] <= root->s[0] )  
+        if ( v1 <= 0 )  
         {
             // cout << root->s  << " " << k1 << endl;
             print_within_range_states(root->left, k1, k2);  
@@ -176,7 +179,7 @@ public:
           
         /* if root's data lies in range,  
         then prints root's data */
-        if (  k1[0] <= root->s[0] && k2[0] >= root->s[0] )  
+        if (  v1 <= 0 && v2 >= 0 )  
         {
             // cout << " ** " << endl;
             // cout << k1 << " <= " << root->s << endl;
@@ -189,10 +192,47 @@ public:
         /* If root->data is smaller than k2, 
             then only we can get o/p keys  
             in right subtree */
-        if (  k2[0] >= root->s[0] )  
+        if (  v2 > 0 )  
         {
             // cout << root->s  << " " << k2 << endl;
             print_within_range_states(root->right, k1, k2);  
         }
     }   
+
+    unsigned int binarytree_count_recursive(const bst_node *rt)
+    {
+        unsigned int count = 1;
+        if (rt->left != NULL) {
+           count += binarytree_count_recursive(rt->left);
+        }
+        if (rt->right != NULL) {
+            count += binarytree_count_recursive(rt->right);
+        }
+        return count;
+    }
+     
+    unsigned int binarytree_count(bst_node *r)
+    {
+        unsigned int count = 0;
+        if (r != NULL) {
+            count = binarytree_count_recursive(r);
+        }
+        return count;
+    }
+
+    int hieght(bst_node *root)
+    {
+        return ceil(log2(binarytree_count(root) + 1)) - 1;
+    }
+    void print_bst_information()
+    {
+        cout << "******************** BST INFORMATION ********************" << endl;
+        cout << "Number of nodes in the BST : " <<  binarytree_count(root) << endl;
+        cout << "Hieght of the BST : " << hieght(root) << endl;
+        cout << "Hieght of the left BST-subtree : " << hieght(root->left) << endl;
+        cout << "Hieght of the right BST-subtree : " << hieght(root->right) << endl;        
+        cout << "*********************************************************" << endl;
+
+
+    }
 };
