@@ -1,4 +1,4 @@
-# Find-a-Storm
+# Find-the-storm
 Storm data provided by the *National Weather Service (NWS)* contains a chronological listing, by state, of
 hurricanes, tornadoes, thunderstorms, hail, floods, drought conditions, lightning, high winds, snow, temperature extremes and other weather phenomena. The data also contain statistics on personal injuries and damage estimates.<br>
 
