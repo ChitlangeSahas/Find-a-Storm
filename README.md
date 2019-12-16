@@ -1,20 +1,30 @@
 # Find-a-Storm
-Storm data, provided by the National Weather Service (NWS), contain a chronological listing, by state, of
+Storm data, provided by the *National Weather Service (NWS)*, contain a chronological listing, by state, of
 hurricanes, tornadoes, thunderstorms, hail, floods, drought conditions, lightning, high winds, snow, temperature extremes and other weather phenomena. The data also contain statistics on personal injuries and
-damage estimates. Data is available from 1950 to the present for the United States of America.
-This project goal of this project is to implement a storm event application that manages storm event
+damage estimates.<br>
+This project goal of this project is to implement a `storm event` application that manages storm event
 data and uses it to answer queries meeting given selection criteria. <br>
 
 The storm event data will be indexed by a __hash table__, and a __binary search tree__ and __max-heap__ as appropriate to support the queries.
 
-## How to run the program
-Use the following command line format for the respective queries: 
-  * `find event <event id>` : searches the __hash table__ for the storm event with identifier event id. Example: find event 383097 // find storm event with given id
-  * `find max <number> <YYYY> <damage type>` : where number is an integer ≤ 50, YYYY is either a specific four digit year or the literal all, and damage type is either damage property or damage crops. This query builds a max-heap on the field damage type for the given year YYYY or all years of storm data.
-    It executes number Delete-Max operations on the heap, each time printing information for the most expensive storm in terms of the damage it caused to property or crops. Specifically, for each event
-    print the event id, event type, and amount of damage of as a dollar amount, on a single line.
-    Example: find max 4 1950 damage_property // find 4 most expensive storms to property in 1950
-    `find max 10 all damage_crops` // find 10 most expensive storms to crops in all years
+## How to use the program
+Run the program with the following in the `cmd` line: <br>
+`>> storm <n>` where `n` is the number of queries the user wants to perform. The following queries are supported at the moment.: 
+  * `find event <event id>` : searches the __hash table__ for the storm event with identifier event id. Example: 
+     * `find event 383097 // find event with event_id 383097  
+  * `find max <number> <YYYY> <damage type>` : where `number` is an `int` ≤ 50, YYYY is either a specific four digit year or the literal     `"all"`, and damage type is either `damage_property` or `damage_crops`. 
+     Example: 
+     * `find max 4 1950 damage_property`
+     * `find max 10 all damage_crops`
+  * `find max fatality <number> <YYYY>`, where number is an `int` ≤ 50, YYYY is either a specific four digit year or the literal `all`.      Example: 
+     * `find max fatality 4 1950 // find 4 most fatal storms in 1950`
+     * `find max fatality 10 all // find 10 most fatal storms in all years`
+  * `range <YYYY> <field name> <low> <high>`, where YYYY is either a specific four digit year or the
+literal `all`, where `field name` is either `state` or `month_name`, and `low` and `high` are strings.
+     Example: 
+     * `range 1950 state A C // all storms in states alphabetically from A to C in 1950`
+     * `range all month name January January // all storms in January in all years`
+
 
 
 ## The Storm and Fatality Event Data Format
